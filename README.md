@@ -2,7 +2,7 @@
 
 - Paper: [SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS](https://arxiv.org/pdf/1609.02907.pdf)
   - link: https://arxiv.org/abs/1609.02907
-  - link to the 
+  - link to the original code: https://github.com/tkipf/gcn
 - Project Proposal (03/26/2023)
   - up to 4 pages + unlimited references
   - template: https://www.overleaf.com/project/63a77466f9ce7b6ffce27a3b
