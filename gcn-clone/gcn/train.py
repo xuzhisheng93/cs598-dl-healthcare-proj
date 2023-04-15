@@ -2,7 +2,9 @@ from __future__ import division
 from __future__ import print_function
 
 import time
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from gcn.utils import *
 from gcn.models import GCN, MLP
@@ -13,7 +15,7 @@ np.random.seed(seed)
 tf.set_random_seed(seed)
 
 # Settings
-flags = tf.app.flags
+flags = tf.compat.v1.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_string('dataset', 'cora', 'Dataset string.')  # 'cora', 'citeseer', 'pubmed'
 flags.DEFINE_string('model', 'gcn', 'Model string.')  # 'gcn', 'gcn_cheby', 'dense'
@@ -75,6 +77,8 @@ sess.run(tf.global_variables_initializer())
 
 cost_val = []
 
+t_begin = time.time()
+print("start training...")
 # Train model
 for epoch in range(FLAGS.epochs):
 
@@ -100,6 +104,8 @@ for epoch in range(FLAGS.epochs):
         break
 
 print("Optimization Finished!")
+
+print("total train time {:.5f}".format(time.time() - t_begin))
 
 # Testing
 test_cost, test_acc, test_duration = evaluate(features, support, y_test, test_mask, placeholders)
