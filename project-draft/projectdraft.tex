@@ -91,7 +91,7 @@ Clearly itemize the claims you are testing:
 
 % In this section you explain your approach -- did you use the author's code, did you aim to re-implement the approach from the paper description? Summarize the resources (code, documentation, GPUs) that you used. 
 
-To reproduce the results, we will utilize both the datasets and code from the original author. The code has undergone minor modifications to make it compatible with the latest TensorFlow and Scipy packages. Additionally, we plan to further tweak the code to test different activation functions later in the project. The code was obtained from the author's GitHub repository, located at https://github.com/tkipf/gcn. By following the instructions provided in the README file, we were able to successfully execute the models using the datasets provided. The computations were performed on an RTX 3080 Ti GPU.
+To reproduce the results, we will utilize both the datasets and code from the original author. The code has undergone minor modifications to make it compatible with the latest TensorFlow and Scipy packages. Additionally, we plan to further tweak the code to test different activation functions later in the project. The code was obtained from the author's GitHub repository, located at \url{https://github.com/tkipf/gcn}. By following the instructions provided in the README file, we were able to successfully execute the models using the datasets provided. The computations were performed on an RTX 3080 Ti GPU.
 
 \subsection{Model descriptions}
 % Describe the models used in the original paper, including the architecture, learning objective and the number of parameters.
@@ -105,7 +105,7 @@ The GCN model is a two-layer neural network of graph convolutional layers. The f
 \subsection{Data descriptions}
 % Describe the datasets you used (with some statistics) and how you obtained them. 
 
-We will be using 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. Following table contains statistics of the datasets.
+We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. Following table contains statistics of the datasets.
 
 \begin{table}[h]
 \centering
@@ -122,17 +122,12 @@ Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
 \subsection{Hyperparameters}
 % Describe how you set the hyperparameters and what the source was for their value (e.g. paper, code or your guess). 
 
-The model is trained using the Adam optimizer with a learning rate of 0.01, a weight decay of 5e-4, and a dropout rate of 0.5. The model is trained for 200 epochs with early stopping after 10 epochs with no improvement in validation loss.
-
-Learning rate: 0.01
-Weight decay (L2 regularization): 5e-4
-Dropout rate: 0.5
-Number of epochs: 200
-Early stopping: After 10 epochs with no improvement in validation loss
-Optimization algorithm: Adam
+The model in the paper used a learning rate of 0.01, a weight decay (L2 regularization) of 5e-4, and a dropout rate of 0.5. The model was trained for 200 epochs using the Adam optimization algorithm. Early stopping was applied to prevent overfitting, with training stopping after 10 epochs with no improvement in validation loss. These hyperparameters were determined through a combination of grid search and manual tuning, and have been shown to perform well on the benchmark datasets used in the paper.
 
 \subsection{Implementation}
 % Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
+
+To reproduce and experiment method described in the original paper, we plan to use most code provided by the author and make some modifications to make experiment. Our code will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}.
 
 
 
@@ -162,6 +157,10 @@ Since the power of our GPU is greater than theirs, we expect the running time to
 
 % The number of subsections for results should be the same as the number of hypotheses you are trying to verify.
 
+% Results - for the draft, results can be any valuable results. For example, results from a simple baseline model in the paper, from intermediate steps prior to the ultimate target task, or from a tiny subset of the dataset. All those followed by your own analysis can be used. Even if your current results are not as good as the ones in the paper, there must be analyses about what possible reasons and solutions/plans are
+
+At the current stage, we managed to run the original model with the provided datasets. And we are able to reproduce similar results to the paper. Following table shows the accuracy and running time of the model on the 3 datasets.
+
 \begin{tabular}{|c|c|c|}
   \hline
   \textbf{Dataset} & \textbf{Accuracy} & \textbf{Runtime (s)} \\
@@ -172,18 +171,20 @@ Since the power of our GPU is greater than theirs, we expect the running time to
   \hline
 \end{tabular}
 
-\subsection{Result 1}
+We could use something like grid search on other datasets as well to further optimize some hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
 
-\subsection{Result 2}
+% \subsection{Result 1}
 
-\subsection{Additional results not present in the original paper}
+% \subsection{Result 2}
+
+% \subsection{Additional results not present in the original paper}
 
 % Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
 
-\section{Plans}
+% \section{Plans}
 
--We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model.
--Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+% -We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model.
+% -Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
 
 \bibliographystyle{draft_natbib}
 \bibliography{projectdraft}
