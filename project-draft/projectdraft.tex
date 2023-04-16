@@ -38,15 +38,16 @@
 
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 
-\title{Reproducibility Project Instructions for CS598 DL4H in Spring 2023}
+\title{Project Draft for Semi-Supervised Classification with Graph Convolutional Networks}
 
-\author{Author1 and Author2 \\
-  \texttt{\{author1, author2\}@illinois.edu}
+\author{Zhisheng Xu and Goutham Pakalapati\\
+  \texttt{\{zx41, gpakal2\}@illinois.edu}
   \\[2em]
-  Group ID: X\\
-  Paper ID: X\\
-  Presentation link: \url{https://www.youtube.com} \\
-  Code link: \url{https://www.github.com}} 
+  Group ID: 28\\
+  Paper ID: 11\\
+  Presentation link: \url{N/A} \\
+  Code link: \url{N/A}
+}
 
 \begin{document}
 \maketitle
@@ -56,63 +57,120 @@
 % For specific grading rubrics, please see the project instruction.
 
 \section{Introduction}
-A  few  sentences  placing  the  work  in  context. Limit it to a few paragraphs at most; your report is on reproducing a piece of work, you don’t have to motivate that work. However, it should be clear enough what the original paper is about and what the contribution of it is.
+% A  few  sentences  placing  the  work  in  context. Limit it to a few paragraphs at most; your report is on reproducing a piece of work, you don’t have to motivate that work. However, it should be clear enough what the original paper is about and what the contribution of it is.
+
+The Semi-Supervised Classification with Graph Convolutional Networks \cite{kipf2017semi} aims to solve the problem of semi-supervised classification on graph-structured data. GCNs are engineered to take advantage of the data's local structure within graphs by utilizing convolutional layers on the adjacency matrix of the graph. It develops a scalable and efficient method that can accurately classify nodes or predict labels for unseen data points in the graph which has limited amount of labeled data.
 
 \section{Scope of reproducibility}
 
-Explain the claims from the paper you picked for the reproduction study and briefly motivate your choice. We recommend picking the claim that is the central contribution of the paper. To find what this contribution is, try to summarize the most important result of the paper in 1-2 sentences, e.g. ``This paper introduces a new activation function X that outperforms a similar activation function Y on tasks Z,V,W.'' 
+% Explain the claims from the paper you picked for the reproduction study and briefly motivate your choice. We recommend picking the claim that is the central contribution of the paper. To find what this contribution is, try to summarize the most important result of the paper in 1-2 sentences, e.g. ``This paper introduces a new activation function X that outperforms a similar activation function Y on tasks Z,V,W.'' 
 
-Make the scope as specific as possible. It should be something that can be supported or rejected by your data. For example, consider this scope: 
+% Make the scope as specific as possible. It should be something that can be supported or rejected by your data. For example, consider this scope: 
 
-\textit{``Contextual embedding models have shown strong performance on a number of tasks across NLP. We will run experiments evaluating two types of contextual embedding models on datasets X, Y, and Z.''}
+% \textit{``Contextual embedding models have shown strong performance on a number of tasks across NLP. We will run experiments evaluating two types of contextual embedding models on datasets X, Y, and Z.''}
 
 
-That scope is too broad and lacks precise outcome (what is ``strong performance?''). Now consider this scope:
+% That scope is too broad and lacks precise outcome (what is ``strong performance?''). Now consider this scope:
 
-\textit{``Finetuning pretrained BERT on SST-2 will have higher accuracy than an LSTM trained with GloVe embeddings.''}
+% \textit{``Finetuning pretrained BERT on SST-2 will have higher accuracy than an LSTM trained with GloVe embeddings.''}
 
-This scope is better because it's more specific and has an outcome that can be either supported or rejected based on your work: 
+% This scope is better because it's more specific and has an outcome that can be either supported or rejected based on your work: 
+
+The proposed GCN model exhibits robust classification performance in terms of both accuracy and speed on benchmark datasets, notably the Cora, Citeseer, and Pubmed citation datasets.
+
 \subsection{Addressed claims from the original paper}
 
 Clearly itemize the claims you are testing:
 \begin{itemize}
-    \item Claim 1
-    \item Claim 2
-    \item Claim 3
+    \item Accuracy (TODO)
+    \item Performance (TODO)
 \end{itemize}
 
 
 \section{Methodology}
 
-In this section you explain your approach -- did you use the author's code, did you aim to re-implement the approach from the paper description? Summarize the resources (code, documentation, GPUs) that you used. 
+% In this section you explain your approach -- did you use the author's code, did you aim to re-implement the approach from the paper description? Summarize the resources (code, documentation, GPUs) that you used. 
+
+To reproduce the results, we will utilize both the datasets and code from the original author. The code has undergone minor modifications to make it compatible with the latest TensorFlow and Scipy packages. Additionally, we plan to further tweak the code to test different activation functions later in the project. The code was obtained from the author's GitHub repository, located at https://github.com/tkipf/gcn. By following the instructions provided in the README file, we were able to successfully execute the models using the datasets provided. The computations were performed on an RTX 3080 Ti GPU.
 
 \subsection{Model descriptions}
-Describe the models used in the original paper, including the architecture, learning objective and the number of parameters.
+% Describe the models used in the original paper, including the architecture, learning objective and the number of parameters.
+
+The GCN model is a two-layer neural network of graph convolutional layers. The first layer is a graph convolutional layer with 16 hidden units followed by a ReLU (Rectified Linear Unit) activation function. The second layer is another graph convolutional layer, which serves as the output layer and has as many output units as the number of classes in the classification problem.
+
+\begin{equation}
+  \mathcal{L} = -\sum_{l\in \mathcal{Y}_L}\sum_{f=1}^{F} Y_{lf}\ln Z_{lf}
+\end{equation}
 
 \subsection{Data descriptions}
-Describe the datasets you used (with some statistics) and how you obtained them. 
+% Describe the datasets you used (with some statistics) and how you obtained them. 
+
+We will be using 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. Following table contains statistics of the datasets.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Dataset & Nodes & Edges & Features & Classes \\ \hline
+Citeseer & 3,327 & 4,732 & 3,703 & 6 \\ \hline
+Cora & 2,708 & 5,429 & 1,433 & 7 \\ \hline
+Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
+\end{tabular}
+\caption{Dataset statistics}
+\end{table}
 
 \subsection{Hyperparameters}
-Describe how you set the hyperparameters and what the source was for their value (e.g. paper, code or your guess). 
+% Describe how you set the hyperparameters and what the source was for their value (e.g. paper, code or your guess). 
+
+The model is trained using the Adam optimizer with a learning rate of 0.01, a weight decay of 5e-4, and a dropout rate of 0.5. The model is trained for 200 epochs with early stopping after 10 epochs with no improvement in validation loss.
+
+Learning rate: 0.01
+Weight decay (L2 regularization): 5e-4
+Dropout rate: 0.5
+Number of epochs: 200
+Early stopping: After 10 epochs with no improvement in validation loss
+Optimization algorithm: Adam
 
 \subsection{Implementation}
-Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
+% Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
+
+
 
 \subsection{Computational requirements}
-Provide information on computational requirements for each of your experiments. For example, the number of CPU/GPU hours and memory requirements.
-Mention both your estimation made before running the experiments (i.e. in the proposal) and the actual resources you used to reproducing the experiments. 
-\textbf{\textit{You'll need to think about this ahead of time, and write your code in a way that captures this information so you can later add it to this section.} }
+% Provide information on computational requirements for each of your experiments. For example, the number of CPU/GPU hours and memory requirements.
+% Mention both your estimation made before running the experiments (i.e. in the proposal) and the actual resources you used to reproducing the experiments. 
+% \textbf{\textit{You'll need to think about this ahead of time, and write your code in a way that captures this information so you can later add it to this section.} }
+
+The author used a 16-core Intel Xeon CPU E5-2640 v3 @ 2.60GHz with a NVIDIA GeForce GTX TITAN X. We will be running the model with AMD Ryzen 7 3700X 8-Core Processor and NVIDIA GeForce RTX 3080 Ti. In the Results section of the original paper, it states the running time on each of the datasets:
+
+\begin{itemize}
+  \item Citeseer: 7 seconds
+  \item Cora: 4 seconds
+  \item Pubmed: 38 seconds
+\end{itemize}
+
+Since the power of our GPU is greater than theirs, we expect the running time to be faster than the original paper.
 
 \section{Results}
-Start with a high-level overview of your results. Does your work support the claims you listed in section 2.1? Keep this section as factual and precise as possible, reserve your judgement and discussion points for the next ``Discussion'' section. 
+% Start with a high-level overview of your results. Does your work support the claims you listed in section 2.1? Keep this section as factual and precise as possible, reserve your judgement and discussion points for the next ``Discussion'' section. 
 
-Go into each individual result you have, say how it relates to one of the claims, and explain what your result is. Logically group related results into sections. Clearly state if you have gone beyond the original paper to run additional experiments and how they relate to the original claims. 
+% Go into each individual result you have, say how it relates to one of the claims, and explain what your result is. Logically group related results into sections. Clearly state if you have gone beyond the original paper to run additional experiments and how they relate to the original claims. 
 
-Tips 1: Be specific and use precise language, e.g. ``we reproduced the accuracy to within 1\% of reported value, that upholds the paper's conclusion that it performs much better than baselines.'' Getting exactly the same number is in most cases infeasible, so you'll need to use your judgement call to decide if your results support the original claim of the paper. 
+% Tips 1: Be specific and use precise language, e.g. ``we reproduced the accuracy to within 1\% of reported value, that upholds the paper's conclusion that it performs much better than baselines.'' Getting exactly the same number is in most cases infeasible, so you'll need to use your judgement call to decide if your results support the original claim of the paper. 
 
-Tips 2: You may want to use tables and figures to demonstrate your results.
+% Tips 2: You may want to use tables and figures to demonstrate your results.
 
 % The number of subsections for results should be the same as the number of hypotheses you are trying to verify.
+
+\begin{tabular}{|c|c|c|}
+  \hline
+  \textbf{Dataset} & \textbf{Accuracy} & \textbf{Runtime (s)} \\
+  \hline
+  Citeseer & 70.6\% & 8.2 \\
+  Cora & 81.7\% & 3.4 \\
+  Pubmed & 79.4\% & 12.5 \\
+  \hline
+\end{tabular}
 
 \subsection{Result 1}
 
@@ -120,37 +178,16 @@ Tips 2: You may want to use tables and figures to demonstrate your results.
 
 \subsection{Additional results not present in the original paper}
 
-Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
+% Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
 
-\section{Discussion}
+\section{Plans}
 
-Describe larger implications of the experimental results, whether the original paper was reproducible, and if it wasn’t, what factors made it irreproducible. 
-
-Give your judgement on if you feel the evidence you got from running the code supports the claims of the paper. Discuss the strengths and weaknesses of your approach -- perhaps you didn't have time to run all the experiments, or perhaps you did additional experiments that further strengthened the claims in the paper.
-
-\subsection{What was easy}
-Describe which parts of your reproduction study were easy. E.g. was it easy to run the author's code, or easy to re-implement their method based on the description in the paper. The goal of this section is to summarize to the reader which parts of the original paper they could easily apply to their problem. 
-
-Tips: Be careful not to give sweeping generalizations. Something that is easy for you might be difficult to others. Put what was easy in context and explain why it was easy (e.g. code had extensive API documentation and a lot of examples that matched experiments in papers). 
-
-\subsection{What was difficult}
-Describe which parts of your reproduction study were difficult or took much more time than you expected. Perhaps the data was not available and you couldn't verify some experiments, or the author's code was broken and had to be debugged first. Or, perhaps some experiments just take too much time/resources to run and you couldn't verify them. The purpose of this section is to indicate to the reader which parts of the original paper are either difficult to re-use, or require a significant amount of work and resources to verify. 
-
-Tips: Be careful to put your discussion in context. For example, don't say ``the math was difficult to follow,'' say ``the math requires advanced knowledge of calculus to follow.'' 
-
-\subsection{Recommendations for reproducibility}
-
-Describe a set of recommendations to the original authors or others who work in this area for improving reproducibility.
-
-\section{Communication with original authors}
-Document the extent of (or lack of) communication with the original authors. To make sure the reproducibility report is a fair assessment of the original research we recommend getting in touch with the original authors. You can ask authors specific questions, or if you don't have any questions you can send them the full report to get their feedback.
-
+-We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model.
+-Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
 
 \bibliographystyle{draft_natbib}
 \bibliography{projectdraft}
 
 %\appendix
-
-
 
 \end{document}
