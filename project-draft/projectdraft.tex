@@ -17,6 +17,7 @@
 \usepackage[hyperref]{projectdraft}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{tabularx}
 \renewcommand{\UrlFont}{\ttfamily\small}
 
 % This is not strictly necessary, and may be commented out,
@@ -76,15 +77,14 @@ The Semi-Supervised Classification with Graph Convolutional Networks \cite{kipf2
 
 % This scope is better because it's more specific and has an outcome that can be either supported or rejected based on your work: 
 
-The proposed GCN model exhibits robust classification performance in terms of both accuracy and speed on benchmark datasets, notably the Cora, Citeseer, and Pubmed citation datasets.
+The proposed GCN model can achieve state-of-the-art performance on semi-supervised node classification tasks by effectively leveraging both labeled and unlabeled data through graph-based regularization. Specifically, the proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while maintaining the competitive runtime speed.
 
-\subsection{Addressed claims from the original paper}
+% \subsection{Addressed claims from the original paper}
 
-Clearly itemize the claims you are testing:
-\begin{itemize}
-    \item Accuracy (TODO)
-    \item Performance (TODO)
-\end{itemize}
+% Clearly itemize the claims you are testing:
+% \begin{itemize}
+%     \item Performance (TODO)
+% \end{itemize}
 
 
 \section{Methodology}
@@ -127,9 +127,7 @@ The model in the paper used a learning rate of 0.01, a weight decay (L2 regulari
 \subsection{Implementation}
 % Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
 
-To reproduce and experiment method described in the original paper, we plan to use most code provided by the author and make some modifications to make experiment. Our code will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}.
-
-
+As mentioned previously, we plan to use the code provided by the authors to replicate the main experiments presented in the paper. Our code with the modifications for ablations will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}.
 
 \subsection{Computational requirements}
 % Provide information on computational requirements for each of your experiments. For example, the number of CPU/GPU hours and memory requirements.
@@ -159,23 +157,57 @@ Since the power of our GPU is greater than theirs, we expect the running time to
 
 % Results - for the draft, results can be any valuable results. For example, results from a simple baseline model in the paper, from intermediate steps prior to the ultimate target task, or from a tiny subset of the dataset. All those followed by your own analysis can be used. Even if your current results are not as good as the ones in the paper, there must be analyses about what possible reasons and solutions/plans are
 
-At the current stage, we managed to run the original model with the provided datasets. And we are able to reproduce similar results to the paper. Following table shows the accuracy and running time of the model on the 3 datasets.
+\subsection{Results of Reproduction}
 
-\begin{tabular}{|c|c|c|}
+
+% \begin{table}[h]
+  %   \centering
+  %   \begin{tabular}{|c|c|c|}
+    %     \hline
+    %     \textbf{Dataset} & \textbf{Accuracy} & \textbf{Runtime (s)} \\
+    %     \hline
+    %     Citeseer & 70.6\% & 8.2 \\
+    %     Cora & 81.7\% & 3.4 \\
+    %     Pubmed & 79.4\% & 12.5 \\
+    %     \hline
+    %   \end{tabular}
+    %   \caption{Accuracy and runtime of the model}
+    % \end{table}
+
+Overall, we managed to execute the original model with the provided datasets. And we are able to achieve similar results to the original paper. Our runtime speed is faster than the original paper, which is due to the fact that we are using a more powerful GPU.
+
+% Specifically, the paper claims that their proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy, and achieves competitive performance compared to GCN and Planetoid
+
+\begin{table}[ht]
+  \centering
+  \caption{Classification Accuracy and Runtime Comparison}
+  \label{tab:accuracy_runtime_comparison}
+  \begin{tabularx}{\columnwidth}{lXXXX}
   \hline
-  \textbf{Dataset} & \textbf{Accuracy} & \textbf{Runtime (s)} \\
-  \hline
-  Citeseer & 70.6\% & 8.2 \\
-  Cora & 81.7\% & 3.4 \\
-  Pubmed & 79.4\% & 12.5 \\
-  \hline
-\end{tabular}
+  Dataset & \multicolumn{2}{c}{Accuracy} & \multicolumn{2}{c}{Runtime (s)} \\ \cline{2-3} \cline{4-5}
+          & Paper & Ours & Paper & Ours \\ \hline
+  Citeseer & 70.3\% & 70.6\% & 7 & 5.3 \\
+  Cora     & 81.5\% & 81.7\% & 4 & 3.4 \\
+  Pubmed   & 79.0\% & 79.4\% & 38 & 12.5 \\ \hline
+  \end{tabularx}
+\end{table}
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{|c|c|c|c|c|}
+%   \hline
+%   Dataset & Nodes & Edges & Features & Classes \\ \hline
+%   Citeseer & 3,327 & 4,732 & 3,703 & 6 \\ \hline
+%   Cora & 2,708 & 5,429 & 1,433 & 7 \\ \hline
+%   Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
+%   \end{tabular}
+%   \caption{Dataset statistics}
+%   \end{table}
 
 We could use something like grid search on other datasets as well to further optimize some hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
 
-% \subsection{Result 1}
 
-% \subsection{Result 2}
+\subsection{Analysis}
 
 % \subsection{Additional results not present in the original paper}
 
