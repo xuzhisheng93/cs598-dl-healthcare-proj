@@ -186,7 +186,7 @@ Overall, we managed to execute the original model with the provided datasets. An
   \hline
   Dataset & \multicolumn{2}{c}{Accuracy} & \multicolumn{2}{c}{Runtime (s)} \\ \cline{2-3} \cline{4-5}
           & Paper & Ours & Paper & Ours \\ \hline
-  Citeseer & 70.3\% & 70.6\% & 7 & 5.3 \\
+  Citeseer & 70.3\% & 70.6\% & 7 & 8.2 \\
   Cora     & 81.5\% & 81.7\% & 4 & 3.4 \\
   Pubmed   & 79.0\% & 79.4\% & 38 & 12.5 \\ \hline
   \end{tabularx}
@@ -204,19 +204,43 @@ Overall, we managed to execute the original model with the provided datasets. An
 %   \caption{Dataset statistics}
 %   \end{table}
 
-We could use something like grid search on other datasets as well to further optimize some hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+
+% We could use something like grid search on other datasets as well to further optimize some hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
 
 
 \subsection{Analysis}
+
+\subsubsection{Citeseer Dataset}
+
+Our reproduction results for the Citeseer dataset show a classification accuracy of 70.6\%, which is slightly better than the original result of 70.3\% reported in the GCN paper. This indicates that our reproduced model is consistent with the original paper's findings and that the GCN model outperforms previously proposed methods in terms of classification accuracy on the Citeseer dataset.
+
+Regarding the runtime, the original paper reported 7 seconds, while our results show a runtime of 8.2 seconds. Despite the slight increase, our reproduction maintains competitive runtime speed, demonstrating the efficiency of the GCN model.
+
+\subsubsection{Cora Dataset}
+
+For the Cora dataset, our reproduction achieves a classification accuracy of 81.7\%, closely matching the original accuracy of 81.5\% reported in the GCN paper. This confirms the effectiveness of the GCN model for the Cora dataset and supports the claim that the model outperforms other methods in terms of classification accuracy.
+
+In terms of runtime, the original paper reported 4 seconds, while our results show a slightly faster runtime of 3.4 seconds. This demonstrates that our reproduction not only maintains competitive runtime speed but also slightly improves upon it.
+
+\subsubsection{Pubmed Dataset}
+
+Our reproduced model achieves an accuracy of 79.4\% on the Pubmed dataset, which is slightly higher than the original result of 79.0\%. Similar to the other datasets, this suggests that our reproduction is consistent with the original findings, and the GCN model outperforms other methods in terms of classification accuracy on the Pubmed dataset.
+
+Regarding runtime, the original paper reported 38 seconds, while our results show a significant improvement with a runtime of 12.5 seconds. This demonstrates that our reproduction not only maintains competitive runtime speed but also greatly improves upon it, further supporting the efficiency of the GCN model.
+
+In summary, our reproduction results confirm the claims made in the original GCN paper. The model outperforms previously proposed methods on all three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while maintaining, and in some cases improving, competitive runtime speed.
 
 % \subsection{Additional results not present in the original paper}
 
 % Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
 
-% \section{Plans}
+\subsection{Plans}
 
-% -We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model.
-% -Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+For further exploration, there are some potential extensions to the reproduction study that could be considered. For example, we could use a similar grid search approach on other datasets to optimize some of the hyperparameters used in the GCN model. This could help us determine whether the same hyperparameters that performed well on the benchmark datasets used in the original paper generalize well to other datasets. Additionally, we could explore preprocessing the graph before feeding it into the GCN model. For instance, we could experiment with adding new edges based on a similarity measure between nodes to see if this improves the performance of the model. By considering these potential extensions, we can further explore the performance and generalizability of the GCN model proposed in the original paper.
+
+% We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+
+
 
 \bibliographystyle{draft_natbib}
 \bibliography{projectdraft}
