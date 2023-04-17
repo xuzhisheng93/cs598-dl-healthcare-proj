@@ -105,7 +105,7 @@ The GCN model is a two-layer neural network of graph convolutional layers. The f
 \subsection{Data descriptions}
 % Describe the datasets you used (with some statistics) and how you obtained them. 
 
-We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. Following table contains statistics of the datasets.
+We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. The following table contains statistics of the datasets.
 
 \begin{table}[h]
 \centering
@@ -122,7 +122,7 @@ Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
 \subsection{Hyperparameters}
 % Describe how you set the hyperparameters and what the source was for their value (e.g. paper, code or your guess). 
 
-The model in the paper used a learning rate of 0.01, a weight decay (L2 regularization) of 5e-4, and a dropout rate of 0.5. The model was trained for 200 epochs using the Adam optimization algorithm. Early stopping was applied to prevent overfitting, with training stopping after 10 epochs with no improvement in validation loss. These hyperparameters were determined through a combination of grid search and manual tuning, and have been shown to perform well on the benchmark datasets used in the paper.
+The model in the paper used a learning rate of 0.01, a weight decay (L2 regularization) of 5e-4, and a dropout rate of 0.5. The model was trained for 200 epochs using the Adam optimization algorithm. Early stopping was applied to prevent overfitting, with training stopping after 10 epochs with no improvement in validation loss. These hyperparameters were determined through a combination of grid search and manual tuning, and have been shown to perform well on the benchmark datasets used in the paper. Hence, we used the hyperparameters specified in the paper for our experiments.
 
 \subsection{Implementation}
 % Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
@@ -142,7 +142,7 @@ The author used a 16-core Intel Xeon CPU E5-2640 v3 @ 2.60GHz with a NVIDIA GeFo
   \item Pubmed: 38 seconds
 \end{itemize}
 
-Since the power of our GPU is greater than theirs, we expect the running time to be faster than the original paper.
+Since the power of our GPU is greater than theirs, we expect our running time to be similar to or faster than the original paper.
 
 \section{Results}
 % Start with a high-level overview of your results. Does your work support the claims you listed in section 2.1? Keep this section as factual and precise as possible, reserve your judgement and discussion points for the next ``Discussion'' section. 
@@ -174,7 +174,7 @@ Since the power of our GPU is greater than theirs, we expect the running time to
     %   \caption{Accuracy and runtime of the model}
     % \end{table}
 
-Overall, we managed to execute the original model with the provided datasets. And we are able to achieve similar results to the original paper. Our runtime speed is faster than the original paper, which is due to the fact that we are using a more powerful GPU.
+Overall, we managed to execute the original model with the provided datasets. And we are able to achieve similar accuracy to the original paper. Our runtime speed is faster than the original paper, which is due to the fact that we are using a more powerful GPU.
 
 % Specifically, the paper claims that their proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy, and achieves competitive performance compared to GCN and Planetoid
 
@@ -186,7 +186,7 @@ Overall, we managed to execute the original model with the provided datasets. An
   \hline
   Dataset & \multicolumn{2}{c}{Accuracy} & \multicolumn{2}{c}{Runtime (s)} \\ \cline{2-3} \cline{4-5}
           & Paper & Ours & Paper & Ours \\ \hline
-  Citeseer & 70.3\% & 70.6\% & 7 & 8.2 \\
+  Citeseer & 70.3\% & 70.6\% & 7 & 5.4 \\
   Cora     & 81.5\% & 81.7\% & 4 & 3.4 \\
   Pubmed   & 79.0\% & 79.4\% & 38 & 12.5 \\ \hline
   \end{tabularx}
@@ -212,23 +212,17 @@ Overall, we managed to execute the original model with the provided datasets. An
 
 \subsubsection{Citeseer Dataset}
 
-Our reproduction results for the Citeseer dataset show a classification accuracy of 70.6\%, which is slightly better than the original result of 70.3\% reported in the GCN paper. This indicates that our reproduced model is consistent with the original paper's findings and that the GCN model outperforms previously proposed methods in terms of classification accuracy on the Citeseer dataset.
-
-Regarding the runtime, the original paper reported 7 seconds, while our results show a runtime of 8.2 seconds. Despite the slight increase, our reproduction maintains competitive runtime speed, demonstrating the efficiency of the GCN model.
+Our reproduction results for the Citeseer dataset show a classification accuracy of 70.6\%, which is slightly better than the original result of 70.3\% reported in the GCN paper. This indicates that our model is consistent with the original paper's findings and that the GCN model outperforms previously proposed methods in terms of classification accuracy on the Citeseer dataset. Regarding the runtime, the original paper reported 7 seconds, while our results show an improvement in runtime at 5.4 seconds.
 
 \subsubsection{Cora Dataset}
 
-For the Cora dataset, our reproduction achieves a classification accuracy of 81.7\%, closely matching the original accuracy of 81.5\% reported in the GCN paper. This confirms the effectiveness of the GCN model for the Cora dataset and supports the claim that the model outperforms other methods in terms of classification accuracy.
-
-In terms of runtime, the original paper reported 4 seconds, while our results show a slightly faster runtime of 3.4 seconds. This demonstrates that our reproduction not only maintains competitive runtime speed but also slightly improves upon it.
+For the Cora dataset, our reproduction achieves a classification accuracy of 81.7\%, which is very similar to the original accuracy of 81.5\% reported in the GCN paper. This result confirms the effectiveness of the GCN model for the Cora dataset and supports the claim that the model outperforms other methods in terms of classification accuracy. In terms of runtime, the original paper reported 4 seconds, while our results show a slightly faster runtime of 3.4 seconds. Again, this shows another slight improvement on the original paper results.
 
 \subsubsection{Pubmed Dataset}
 
-Our reproduced model achieves an accuracy of 79.4\% on the Pubmed dataset, which is slightly higher than the original result of 79.0\%. Similar to the other datasets, this suggests that our reproduction is consistent with the original findings, and the GCN model outperforms other methods in terms of classification accuracy on the Pubmed dataset.
+Our model achieves an accuracy of 79.4\% on the Pubmed dataset, which is slightly higher than the original result of 79.0\%. Similar to the other two datasets, this suggests that our reproduction is consistent with the original findings, and the GCN model outperforms other methods in terms of classification accuracy on the Pubmed dataset. For runtime, the original paper reported 38 seconds, while our results show a significant improvement with a runtime of 12.5 seconds. This is a great improvement upon the original time for the Pubmed dataset, demonstrating the efficiency of the GCN model.
 
-Regarding runtime, the original paper reported 38 seconds, while our results show a significant improvement with a runtime of 12.5 seconds. This demonstrates that our reproduction not only maintains competitive runtime speed but also greatly improves upon it, further supporting the efficiency of the GCN model.
-
-In summary, our reproduction results confirm the claims made in the original GCN paper. The model outperforms previously proposed methods on all three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while maintaining, and in some cases improving, competitive runtime speed.
+In summary, our reproduction results confirm the claims made in the original GCN paper. The model outperforms previously proposed methods on all three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while improving on speed.
 
 % \subsection{Additional results not present in the original paper}
 
