@@ -225,6 +225,8 @@ Subsequently, we explored potential performance improvements by implementing sev
 
 In terms of swapping activation functions, the majority of activation function (nn.tf.leaky\_relu, nn.tf.tanh, nn.tf.elu) options resulted in very similar performance to the original results using tf.nn.relu. There were slight improvements or declines in performance depending on the dataset and activation function, as illustrated in the table above. However, the Sigmoid activation function yielded significantly worse results compared to the other four activation functions. This is possibly because the non-zero centered Sigmoid function can cause vanishing gradient issues, which might lead to slower convergence or getting stuck in local minima. Overall, modifying the activation function does not seem like a worthwhile step to add onto the original process.
 
+Table \ref{table:activation-functions} on page \pageref{table:activation-functions} shows the result of the experiments with different activation functions.
+
 \begin{table}[h]
   \centering
   \begin{tabular}{p{2cm}|c|c|c}
@@ -242,7 +244,9 @@ In terms of swapping activation functions, the majority of activation function (
 
 \subsubsection{Exploration with Different Optimizers}
 
-The second experiment we performed on top of the original study was to try alternate optimizers. Specifically, we tested the GradientDescentOptimizer, Adadelta, and RMSProp.. For each optimizer, we obtained results using learning rates of 0.01 and 0.99, as shown in the table above. For the datasets, we achieved results close to the original findings using at least one combination of optimizers and learning rates. Furthermore, for the RMSProp optimizer on the PubMed dataset, I decided to try a learning rate of 0.1 and received an accuracy of 0.792, which slightly edges out the original results for this dataset using the AdamOptimizer. This shows that the optimal learning rates for each optimizer may lie between 0.01 and 0.99, so another step we can try in the future is to do a grid search to find the best optimizer and learning rate combination, which may also depend on dataset. We would want the most general one. Overall, modifying the optimizers appears to be a promising direction for further improvement.
+The second experiment we performed on top of the original study was to try alternate optimizers. Specifically, we tested the GradientDescentOptimizer, Adadelta, and RMSProp. For each optimizer, we obtained results using learning rates of 0.01 and 0.99, as shown in the table above. For the datasets, we achieved results close to the original findings using at least one combination of optimizers and learning rates. Furthermore, for the RMSProp optimizer on the PubMed dataset, I decided to try a learning rate of 0.1 and received an accuracy of 0.792, which slightly edges out the original results for this dataset using the AdamOptimizer. This shows that the optimal learning rates for each optimizer may lie between 0.01 and 0.99, so another step we can try in the future is to do a grid search to find the best optimizer and learning rate combination, which may also depend on dataset. We would want the most general one. Overall, modifying the optimizers appears to be a promising direction for further improvement.
+
+Table \ref{table:optimizers} on page \pageref{table:optimizers} shows the result of the experiments with different optimizers.
 
 \begin{table}[h]
   \centering
@@ -263,9 +267,9 @@ The second experiment we performed on top of the original study was to try alter
 
 \subsubsection{Exploration with Different Number of GCN Layers}
 
-The third experiment we added was adding and removing a layer from the GCN model.
+The third experiment we conducted involved adding and removing a layer from the GCN model. Specifically, we tested the model with a single GCN layer, double GCN layers, and triple GCN layers. Although the performance of these models is not comparable to the original two-layer model, the model with three GCN layers showed similar performance to the original model that had two GCN layers. Furthermore, the model with one GCN layer showed worse performance than the original model. This could be because the model with one GCN layer is not deep enough to learn the features of the dataset. Overall, simply modifying the number of GCN layers in the model without changing other parameters did not provide promising results.
 
-
+Table \ref{table:number-of-layers} on page \pageref{table:number-of-layers} shows the result of the experiments with different number of GCN layers.
 
 \begin{table}[h]
   \centering
@@ -275,7 +279,7 @@ The third experiment we added was adding and removing a layer from the GCN model
   1 (2nd layer removed)   & 0.742 & 0.652 & 0.724 \\
   3 (added ReLU layer)    & 0.796 & 0.670 & 0.747
   \end{tabular}
-  \caption{Accuracies for different numbers of layers and datasets}
+  \caption{Accuracies for different number of layers and datasets}
   \label{table:number-of-layers}
 \end{table}
 
@@ -285,8 +289,10 @@ Our experiments are successful in demonstrating that the original paper by Kipf 
 The consistency between our results and those of the original authors not only supports the conclusions of the paper but also suggests potential improvements due to advances in hardware since the original study. These improvements may lead to more efficient training and better performance of the GCN model in certain cases. Our findings provide a strong basis for further studies in graph convolutional networks, as researchers can be confident in the reproducibility of the original paper's methods and results. Additional modifications and optimizations should be explored, contributing to more effective applications of GCNs in the real world.
 
 Reproducing the original study was made easier by the availability of the datasets on the authors' GitHub repository, which assisted greatly in the process of acquiring the necessary datasets. Additionally, the provided code was a solid starting point (not counting the issues we faced with the TensorFlow library setup due to the authors using more legacy functionality), enabling us to efficiently obtain initial results that matched those of the original authors. Furthermore, the practicality of the GCN model, along with its resemblance to convolutional neural networks, contributed to the ease of application of the method.
-Some challenges we encountered during the reproduction process included comprehending the theoretical and mathematical background of graph convolutional networks as well as previous papers that the new method relied on. Furthermore, it was not simple to apply the concepts of convolution to a more abstract structure, such as graphs. These aspects required a deeper level of understanding to effectively implement and adapt the GCN model. Additionally, we experienced technical difficulties when attempting to run the code initially, which necessitated the use of an older, compatible version of TensorFlow.
 
+Some challenges we encountered during the reproduction process included understanding the theoretical and mathematical background of graph convolutional networks as well as previous papers that the new method relied on. Furthermore, it was not simple to apply the concepts of convolution to a more abstract structure, such as graphs. These aspects required a deeper level of understanding to effectively implement and adapt the GCN model. Additionally, we experienced technical difficulties when attempting to run the code initially, which necessitated the use of an older, compatible version of TensorFlow.
+
+For the original authors and others working on this area, we would recommend that they spend time on expanding the types of datasets to more than mostly citation networks and further optimize the hyperparameters that were covered in our reproduction such as learning rate. This would allow them to test the generalizability of their methods on a wider range of graph examples. Hopefully, this helps make the next iteration even more successful on diverse types of data.
 
 \bibliographystyle{final_natbib}
 \bibliography{projectfinal}
