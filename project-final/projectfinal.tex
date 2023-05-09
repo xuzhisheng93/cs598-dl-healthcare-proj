@@ -18,6 +18,8 @@
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
 \renewcommand{\UrlFont}{\ttfamily\small}
 
 % This is not strictly necessary, and may be commented out,
@@ -83,7 +85,7 @@ To reproduce the results, we will utilize both the datasets and code from the or
 \subsection{Model descriptions}
 % Describe the models used in the original paper, including the architecture, learning objective and the number of parameters.
 
-The GCN model is a two-layer neural network of graph convolutional layers. The first layer is a graph convolutional layer with 16 hidden units followed by a ReLU (Rectified Linear Unit) activation function. The second layer is another graph convolutional layer, which serves as the output layer and has as many output units as the number of classes in the classification problem.
+The GCN model is a two-layer neural network of graph convolutional layers. The first layer is a graph convolutional layer with 16 hidden units followed by a ReLU (Rectified Linear Unit) activation function. The second layer is another graph convolutional layer, which serves as the output layer and has as many output units as the number of classes in the classification problem. Graph convolutional layers are to graph structures what classic convolutional layers are in processing of images. In the graph convolutional layer, the features of each node are updated by using an aggregation of information from neighboring nodes to capture local relationships and structures present in the graph structure.
 
 \begin{equation}
   \mathcal{L} = -\sum_{l\in \mathcal{Y}_L}\sum_{f=1}^{F} Y_{lf}\ln Z_{lf}
@@ -92,7 +94,7 @@ The GCN model is a two-layer neural network of graph convolutional layers. The f
 \subsection{Data descriptions}
 % Describe the datasets you used (with some statistics) and how you obtained them. 
 
-We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. The following table contains statistics of the datasets.
+We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. The following table contains statistics of the datasets. The three datasets that we used are well-established benchmark datasets that are based on real-world applications. Specifically, for each of the citation network datasets, each of the scientific papers are represented by feature vectors in a sparse bag-of-words representation. In the implementation, we use undirected edges to represent citations between the scientific papers.
 
 \begin{table}[h]
 \centering
@@ -215,12 +217,75 @@ In summary, our reproduction results confirm the claims made in the original GCN
 
 % Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
 
-\subsection{Plans}
+\subsection{Results of Additional Experiments}
 
-For further exploration, there are some potential extensions to the reproduction study that could be considered. For example, we could use a similar grid search approach on other datasets to optimize some of the hyperparameters used in the GCN model. This could help us determine whether the same hyperparameters that performed well on the benchmark datasets used in the original paper generalize well to other datasets. Additionally, we could explore preprocessing the graph before feeding it into the GCN model. For instance, we could experiment with adding new edges based on a similarity measure between nodes to see if this improves the performance of the model. By considering these potential extensions, we can further explore the performance and generalizability of the GCN model proposed in the original paper.
+Subsequently, we explored potential performance improvements by implementing several modifications to the original model. Specifically, we experimented with alternative activation functions in the first graph convolutional layer, in place of the original ReLU function. Additionally, we tested different optimization algorithms for minimizing the loss function. Finally, we examined the impact of altering the architecture of the GCN model by either removing or adding a layer, to assess the resulting differences in performance.
 
-% We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+\subsubsection{Exploration with Different Activation Functions}
 
+In terms of swapping activation functions, the majority of activation function (nn.tf.leaky\_relu, nn.tf.tanh, nn.tf.elu) options resulted in very similar performance to the original results using tf.nn.relu. There were slight improvements or declines in performance depending on the dataset and activation function, as illustrated in the table above. However, the Sigmoid activation function yielded significantly worse results compared to the other four activation functions. This is possibly because the non-zero centered Sigmoid function can cause vanishing gradient issues, which might lead to slower convergence or getting stuck in local minima. Overall, modifying the activation function does not seem like a worthwhile step to add onto the original process.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{p{2cm}|c|c|c}
+  \textbf{Activation Function} & \textbf{Cora} & \textbf{Citeseer} & \textbf{PubMed} \\ \hline
+  ReLU        & 0.817 & 0.706 & 0.794 \\
+  Sigmoid     & 0.092 & 0.077 & 0.218 \\
+  Tanh        & 0.816 & 0.704 & 0.793 \\
+  Leaky ReLU  & 0.813 & 0.704 & 0.789 \\
+  ELU         & 0.817 & 0.701 & 0.791
+  \end{tabular}
+  \caption{Accuracies for different activation functions and datasets}
+  \label{table:activation-functions}
+\end{table}
+
+
+\subsubsection{Exploration with Different Optimizers}
+
+The second experiment we performed on top of the original study was to try alternate optimizers. Specifically, we tested the GradientDescentOptimizer, Adadelta, and RMSProp.. For each optimizer, we obtained results using learning rates of 0.01 and 0.99, as shown in the table above. For the datasets, we achieved results close to the original findings using at least one combination of optimizers and learning rates. Furthermore, for the RMSProp optimizer on the PubMed dataset, I decided to try a learning rate of 0.1 and received an accuracy of 0.792, which slightly edges out the original results for this dataset using the AdamOptimizer. This shows that the optimal learning rates for each optimizer may lie between 0.01 and 0.99, so another step we can try in the future is to do a grid search to find the best optimizer and learning rate combination, which may also depend on dataset. We would want the most general one. Overall, modifying the optimizers appears to be a promising direction for further improvement.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{p{2.3cm}|c|c|c}
+  \textbf{Optimizer (LR)} & \textbf{Cora} & \textbf{Citeseer} & \textbf{PubMed} \\ \hline
+  Adam (0.01)             & 0.818 & 0.706 & 0.794 \\
+  Adam (0.99)             & 0.718 & 0.679 & 0.666 \\
+  Adadelta (0.01)         & 0.145 & 0.268 & 0.327 \\
+  Adadelta (0.99)         & 0.388 & 0.433 & 0.608 \\
+  RMSProp (0.01)          & 0.760 & 0.660 & 0.774 \\
+  RMSProp (0.99)          & 0.729 & 0.697 & 0.765 \\
+  Gradient Descent (0.01) & 0.144 & 0.269 & 0.328 \\
+  Gradient Descent (0.99) & 0.444 & 0.445 & 0.547
+  \end{tabular}
+  \caption{Accuracies for different optimizers, learning rates, and datasets}
+  \label{table:optimizers}
+\end{table}
+
+\subsubsection{Exploration with Different Number of GCN Layers}
+
+The third experiment we added was adding and removing a layer from the GCN model.
+
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{p{2.5cm}|c|c|c}
+  \textbf{Number of Layers} & \textbf{Cora} & \textbf{Citeseer} & \textbf{PubMed} \\ \hline
+  2 (original setup)      & 0.817 & 0.706 & 0.794 \\
+  1 (2nd layer removed)   & 0.742 & 0.652 & 0.724 \\
+  3 (added ReLU layer)    & 0.796 & 0.670 & 0.747
+  \end{tabular}
+  \caption{Accuracies for different numbers of layers and datasets}
+  \label{table:number-of-layers}
+\end{table}
+
+\section{Discussion}
+
+Our experiments are successful in demonstrating that the original paper by Kipf and Welling is indeed reproducible. By following the methodology in the paper, we were able to closely replicate their results, confirming the validity of their work.
+The consistency between our results and those of the original authors not only supports the conclusions of the paper but also suggests potential improvements due to advances in hardware since the original study. These improvements may lead to more efficient training and better performance of the GCN model in certain cases. Our findings provide a strong basis for further studies in graph convolutional networks, as researchers can be confident in the reproducibility of the original paper's methods and results. Additional modifications and optimizations should be explored, contributing to more effective applications of GCNs in the real world.
+
+Reproducing the original study was made easier by the availability of the datasets on the authors' GitHub repository, which assisted greatly in the process of acquiring the necessary datasets. Additionally, the provided code was a solid starting point (not counting the issues we faced with the TensorFlow library setup due to the authors using more legacy functionality), enabling us to efficiently obtain initial results that matched those of the original authors. Furthermore, the practicality of the GCN model, along with its resemblance to convolutional neural networks, contributed to the ease of application of the method.
+Some challenges we encountered during the reproduction process included comprehending the theoretical and mathematical background of graph convolutional networks as well as previous papers that the new method relied on. Furthermore, it was not simple to apply the concepts of convolution to a more abstract structure, such as graphs. These aspects required a deeper level of understanding to effectively implement and adapt the GCN model. Additionally, we experienced technical difficulties when attempting to run the code initially, which necessitated the use of an older, compatible version of TensorFlow.
 
 
 \bibliographystyle{final_natbib}
