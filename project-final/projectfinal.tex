@@ -66,14 +66,17 @@ The Semi-Supervised Classification with Graph Convolutional Networks \cite{kipf2
 
 \section{Scope of reproducibility}
 
-The proposed GCN model can achieve state-of-the-art performance on semi-supervised node classification tasks by effectively leveraging both labeled and unlabeled data through graph-based regularization. Specifically, the proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while maintaining the competitive runtime speed.
+The proposed GCN model can achieve state-of-the-art performance on semi-supervised node classification tasks by effectively leveraging both labeled and unlabeled data through graph-based regularization. Specifically, the proposed GCN model outperforms previously proposed methods on three benchmark datasets in terms of
+
+\begin{itemize}
+    \item classification accuracy, and
+    \item maintaining the competitive runtime speed.
+\end{itemize}
 
 % \subsection{Addressed claims from the original paper}
 
 % Clearly itemize the claims you are testing:
-% \begin{itemize}
-%     \item Performance (TODO)
-% \end{itemize}
+
 
 
 \section{Methodology}
@@ -94,7 +97,7 @@ The GCN model is a two-layer neural network of graph convolutional layers. The f
 \subsection{Data descriptions}
 % Describe the datasets you used (with some statistics) and how you obtained them. 
 
-We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. The following table contains statistics of the datasets. The three datasets that we used are well-established benchmark datasets that are based on real-world applications. Specifically, for each of the citation network datasets, each of the scientific papers are represented by feature vectors in a sparse bag-of-words representation. In the implementation, we use undirected edges to represent citations between the scientific papers.
+We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository \cite{kipf2016gcn}. And these dataset were first used by Collective classification in network data \cite{sen2008collective} The following table contains statistics of the datasets. The three datasets that we used are well-established benchmark datasets that are based on real-world applications. Specifically, for each of the citation network datasets, each of the scientific papers are represented by feature vectors in a sparse bag-of-words representation. In the implementation, we use undirected edges to represent citations between the scientific papers.
 
 \begin{table}[h]
 \centering
@@ -116,7 +119,7 @@ The model in the paper used a learning rate of 0.01, a weight decay (L2 regulari
 \subsection{Implementation}
 % Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
 
-As mentioned previously, we plan to use the code provided by the authors to replicate the main experiments presented in the paper. Our code with the modifications for ablations will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}.
+As mentioned previously, we plan to use the code provided by the authors to replicate the main experiments presented in the paper. Our code with the modifications for ablations will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}. The Jupyter Notebook of the reproduction and descriptions can be found at src/project.ipynb within the repository.
 
 \subsection{Computational requirements}
 % Provide information on computational requirements for each of your experiments. For example, the number of CPU/GPU hours and memory requirements.
@@ -131,7 +134,7 @@ The author used a 16-core Intel Xeon CPU E5-2640 v3 @ 2.60GHz with a NVIDIA GeFo
   \item Pubmed: 38 seconds
 \end{itemize}
 
-Since the power of our GPU is greater than theirs, we expect our running time to be similar to or faster than the original paper.
+Since the power of our GPU is greater than theirs, we expect our running time to be similar to or faster than the original paper. And the total number of experiment combinations of ablation is 42. We ran one trial for each of the combination. Additionally, we also limit the maximum number of epochs to 200.
 
 \section{Results}
 % Start with a high-level overview of your results. Does your work support the claims you listed in section 2.1? Keep this section as factual and precise as possible, reserve your judgement and discussion points for the next ``Discussion'' section. 
