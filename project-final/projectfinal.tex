@@ -1,0 +1,231 @@
+%
+% File projectfinal.tex
+%
+%% Based on the style files for EMNLP 2020, which were
+%% Based on the style files for ACL 2020, which were
+%% Based on the style files for ACL 2018, NAACL 2018/19, which were
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
+%% EACL-2009, IJCNLP-2008...
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{projectfinal}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{tabularx}
+\renewcommand{\UrlFont}{\ttfamily\small}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+\aclfinalcopy
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+% Content lightly modified from original work by Jesse Dodge and Noah Smith
+
+
+\newcommand\BibTeX{B\textsc{ib}\TeX}
+
+\title{Reproduction of Semi-Supervised Classification with Graph Convolutional Networks}
+
+\author{Zhisheng Xu and Goutham Pakalapati\\
+  \texttt{\{zx41, gpakal2\}@illinois.edu}
+  \\[2em]
+  Group ID: 28\\
+  Paper ID: 11\\
+  Presentation link: \url{N/A} \\
+  Code link: \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}
+}
+
+\begin{document}
+\maketitle
+
+% All sections are mandatory.
+% Keep in mind that your page limit is 8, excluding references.
+% For specific grading rubrics, please see the project instruction.
+
+\section{Introduction}
+% A  few  sentences  placing  the  work  in  context. Limit it to a few paragraphs at most; your report is on reproducing a piece of work, you don’t have to motivate that work. However, it should be clear enough what the original paper is about and what the contribution of it is.
+
+The Semi-Supervised Classification with Graph Convolutional Networks \cite{kipf2017semi} aims to solve the problem of semi-supervised classification on graph-structured data. GCNs are engineered to take advantage of the data's local structure within graphs by utilizing convolutional layers on the adjacency matrix of the graph. It develops a scalable and efficient method that can accurately classify nodes or predict labels for unseen data points in the graph which has limited amount of labeled data.
+
+\section{Scope of reproducibility}
+
+The proposed GCN model can achieve state-of-the-art performance on semi-supervised node classification tasks by effectively leveraging both labeled and unlabeled data through graph-based regularization. Specifically, the proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while maintaining the competitive runtime speed.
+
+% \subsection{Addressed claims from the original paper}
+
+% Clearly itemize the claims you are testing:
+% \begin{itemize}
+%     \item Performance (TODO)
+% \end{itemize}
+
+
+\section{Methodology}
+
+% In this section you explain your approach -- did you use the author's code, did you aim to re-implement the approach from the paper description? Summarize the resources (code, documentation, GPUs) that you used. 
+
+To reproduce the results, we will utilize both the datasets and code from the original author. The code has undergone minor modifications to make it compatible with the latest TensorFlow and Scipy packages. Additionally, we plan to further tweak the code to test different activation functions later in the project. The code was obtained from the author's GitHub repository, located at \url{https://github.com/tkipf/gcn}. By following the instructions provided in the README file, we were able to successfully execute the models using the datasets provided. The computations were performed on an RTX 3080 Ti GPU.
+
+\subsection{Model descriptions}
+% Describe the models used in the original paper, including the architecture, learning objective and the number of parameters.
+
+The GCN model is a two-layer neural network of graph convolutional layers. The first layer is a graph convolutional layer with 16 hidden units followed by a ReLU (Rectified Linear Unit) activation function. The second layer is another graph convolutional layer, which serves as the output layer and has as many output units as the number of classes in the classification problem.
+
+\begin{equation}
+  \mathcal{L} = -\sum_{l\in \mathcal{Y}_L}\sum_{f=1}^{F} Y_{lf}\ln Z_{lf}
+\end{equation}
+
+\subsection{Data descriptions}
+% Describe the datasets you used (with some statistics) and how you obtained them. 
+
+We will be testing with 3 citation network datasets -- Citeseer, Cora and Pubmed -- nodes are documents and edges are citation links. These datasets are obtained from the author's GitHub repository. The following table contains statistics of the datasets.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Dataset & Nodes & Edges & Features & Classes \\ \hline
+Citeseer & 3,327 & 4,732 & 3,703 & 6 \\ \hline
+Cora & 2,708 & 5,429 & 1,433 & 7 \\ \hline
+Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
+\end{tabular}
+\caption{Dataset statistics}
+\end{table}
+
+\subsection{Hyperparameters}
+% Describe how you set the hyperparameters and what the source was for their value (e.g. paper, code or your guess). 
+
+The model in the paper used a learning rate of 0.01, a weight decay (L2 regularization) of 5e-4, and a dropout rate of 0.5. The model was trained for 200 epochs using the Adam optimization algorithm. Early stopping was applied to prevent overfitting, with training stopping after 10 epochs with no improvement in validation loss. These hyperparameters were determined through a combination of grid search and manual tuning, and have been shown to perform well on the benchmark datasets used in the paper. Hence, we used the hyperparameters specified in the paper for our experiments.
+
+\subsection{Implementation}
+% Describe whether you use the existing code or write your own code, with the link to the code. Note that the github repo you link to should be public and have a clear documentation.
+
+As mentioned previously, we plan to use the code provided by the authors to replicate the main experiments presented in the paper. Our code with the modifications for ablations will be available at \url{https://github.com/xuzhisheng93/cs598-dl-healthcare-proj}.
+
+\subsection{Computational requirements}
+% Provide information on computational requirements for each of your experiments. For example, the number of CPU/GPU hours and memory requirements.
+% Mention both your estimation made before running the experiments (i.e. in the proposal) and the actual resources you used to reproducing the experiments. 
+% \textbf{\textit{You'll need to think about this ahead of time, and write your code in a way that captures this information so you can later add it to this section.} }
+
+The author used a 16-core Intel Xeon CPU E5-2640 v3 @ 2.60GHz with a NVIDIA GeForce GTX TITAN X. We will be running the model with AMD Ryzen 7 3700X 8-Core Processor and NVIDIA GeForce RTX 3080 Ti. In the Results section of the original paper, it states the running time on each of the datasets:
+
+\begin{itemize}
+  \item Citeseer: 7 seconds
+  \item Cora: 4 seconds
+  \item Pubmed: 38 seconds
+\end{itemize}
+
+Since the power of our GPU is greater than theirs, we expect our running time to be similar to or faster than the original paper.
+
+\section{Results}
+% Start with a high-level overview of your results. Does your work support the claims you listed in section 2.1? Keep this section as factual and precise as possible, reserve your judgement and discussion points for the next ``Discussion'' section. 
+
+% Go into each individual result you have, say how it relates to one of the claims, and explain what your result is. Logically group related results into sections. Clearly state if you have gone beyond the original paper to run additional experiments and how they relate to the original claims. 
+
+% Tips 1: Be specific and use precise language, e.g. ``we reproduced the accuracy to within 1\% of reported value, that upholds the paper's conclusion that it performs much better than baselines.'' Getting exactly the same number is in most cases infeasible, so you'll need to use your judgement call to decide if your results support the original claim of the paper. 
+
+% Tips 2: You may want to use tables and figures to demonstrate your results.
+
+% The number of subsections for results should be the same as the number of hypotheses you are trying to verify.
+
+% Results - for the draft, results can be any valuable results. For example, results from a simple baseline model in the paper, from intermediate steps prior to the ultimate target task, or from a tiny subset of the dataset. All those followed by your own analysis can be used. Even if your current results are not as good as the ones in the paper, there must be analyses about what possible reasons and solutions/plans are
+
+\subsection{Results of Reproduction}
+
+
+% \begin{table}[h]
+  %   \centering
+  %   \begin{tabular}{|c|c|c|}
+    %     \hline
+    %     \textbf{Dataset} & \textbf{Accuracy} & \textbf{Runtime (s)} \\
+    %     \hline
+    %     Citeseer & 70.6\% & 8.2 \\
+    %     Cora & 81.7\% & 3.4 \\
+    %     Pubmed & 79.4\% & 12.5 \\
+    %     \hline
+    %   \end{tabular}
+    %   \caption{Accuracy and runtime of the model}
+    % \end{table}
+
+Overall, we managed to execute the original model with the provided datasets. And we are able to achieve similar accuracy to the original paper. Our runtime speed is faster than the original paper, which is due to the fact that we are using a more powerful GPU.
+
+% Specifically, the paper claims that their proposed GCN model outperforms previously proposed methods on three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy, and achieves competitive performance compared to GCN and Planetoid
+
+\begin{table}[ht]
+  \centering
+  \caption{Classification Accuracy and Runtime Comparison}
+  \label{tab:accuracy_runtime_comparison}
+  \begin{tabularx}{\columnwidth}{lXXXX}
+  \hline
+  Dataset & \multicolumn{2}{c}{Accuracy} & \multicolumn{2}{c}{Runtime (s)} \\ \cline{2-3} \cline{4-5}
+          & Paper & Ours & Paper & Ours \\ \hline
+  Citeseer & 70.3\% & 70.6\% & 7 & 5.4 \\
+  Cora     & 81.5\% & 81.7\% & 4 & 3.4 \\
+  Pubmed   & 79.0\% & 79.4\% & 38 & 12.5 \\ \hline
+  \end{tabularx}
+\end{table}
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{|c|c|c|c|c|}
+%   \hline
+%   Dataset & Nodes & Edges & Features & Classes \\ \hline
+%   Citeseer & 3,327 & 4,732 & 3,703 & 6 \\ \hline
+%   Cora & 2,708 & 5,429 & 1,433 & 7 \\ \hline
+%   Pubmed & 19,717 & 44,338 & 500 & 3 \\ \hline
+%   \end{tabular}
+%   \caption{Dataset statistics}
+%   \end{table}
+
+
+% We could use something like grid search on other datasets as well to further optimize some hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+
+
+\subsection{Analysis}
+
+\subsubsection{Citeseer Dataset}
+
+Our reproduction results for the Citeseer dataset show a classification accuracy of 70.6\%, which is slightly better than the original result of 70.3\% reported in the GCN paper. This indicates that our model is consistent with the original paper's findings and that the GCN model outperforms previously proposed methods in terms of classification accuracy on the Citeseer dataset. Regarding the runtime, the original paper reported 7 seconds, while our results show an improvement in runtime at 5.4 seconds.
+
+\subsubsection{Cora Dataset}
+
+For the Cora dataset, our reproduction achieves a classification accuracy of 81.7\%, which is very similar to the original accuracy of 81.5\% reported in the GCN paper. This result confirms the effectiveness of the GCN model for the Cora dataset and supports the claim that the model outperforms other methods in terms of classification accuracy. In terms of runtime, the original paper reported 4 seconds, while our results show a slightly faster runtime of 3.4 seconds. Again, this shows another slight improvement on the original paper results.
+
+\subsubsection{Pubmed Dataset}
+
+Our model achieves an accuracy of 79.4\% on the Pubmed dataset, which is slightly higher than the original result of 79.0\%. Similar to the other two datasets, this suggests that our reproduction is consistent with the original findings, and the GCN model outperforms other methods in terms of classification accuracy on the Pubmed dataset. For runtime, the original paper reported 38 seconds, while our results show a significant improvement with a runtime of 12.5 seconds. This is a great improvement upon the original time for the Pubmed dataset, demonstrating the efficiency of the GCN model.
+
+In summary, our reproduction results confirm the claims made in the original GCN paper. The model outperforms previously proposed methods on all three benchmark datasets (Cora, Citeseer, and Pubmed) in terms of classification accuracy while improving on speed.
+
+% \subsection{Additional results not present in the original paper}
+
+% Describe any additional experiments beyond the original paper. This could include experimenting with additional datasets, exploring different methods, running more ablations, or tuning the hyperparameters. For each additional experiment, clearly describe which experiment you conducted, its result, and discussions (e.g. what is the indication of the result).
+
+\subsection{Plans}
+
+For further exploration, there are some potential extensions to the reproduction study that could be considered. For example, we could use a similar grid search approach on other datasets to optimize some of the hyperparameters used in the GCN model. This could help us determine whether the same hyperparameters that performed well on the benchmark datasets used in the original paper generalize well to other datasets. Additionally, we could explore preprocessing the graph before feeding it into the GCN model. For instance, we could experiment with adding new edges based on a similarity measure between nodes to see if this improves the performance of the model. By considering these potential extensions, we can further explore the performance and generalizability of the GCN model proposed in the original paper.
+
+% We could use something like grid search on other datasets as well to further optimize some of the hyperparameters used in the model. Processing the graph before feeding into a GCN (e.g. adding new edges based on similarity measure)
+
+
+
+\bibliographystyle{final_natbib}
+\bibliography{projectfinal}
+
+%\appendix
+
+\end{document}
